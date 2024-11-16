@@ -1,0 +1,16 @@
+make a main.py file 
+and make a instance of FastAPI to start everthing
+make a first function and remeber to return something in it
+uvicorn app:main(main is the file name and app is instance of the FastAPI that we create) --reload to start the server
+add a decorater of app so that api connects to the function
+the decorate added is ended with a url indexing like '/about'
+
+if you want to use dynamic path you need to inclose it in a {} and provide it as a parameter in the function
+help to get infinite number of pages
+
+if we give function any other parameter other than the dynamic one then it becomes a query paramerter like the limit of how many docs to show
+we use the query parameter by using ? and for each query add a & sign in between
+we can provide a default value to the parameters so that its not necessary to give a input
+
+import pydantic to use the base model feature that allows us to create a post method for out api
+make a class with the inheritance of BaseModel to activated post metthods in it
