@@ -9,6 +9,12 @@ class something(BaseModel):
     published:bool
     address:Optional[str]
 
+class info(BaseModel):
+    name:str
+    age:int
+    about:str
+    working_professional:bool
+
 app = FastAPI()
 
 @app.get('/')
@@ -37,6 +43,10 @@ def test(limit=10,published:bool = True,sort:Optional[str] = None):
 @app.post('/something')
 def something(request:something):
     return {'data':f'something is created with the title {request.title}'}
+
+@app.post('/info')
+def info(request:info):
+    return f'hello {request.name}'
 
 if __name__ == '__main__':
     uvicorn.run(app,host='127.0.0.1',port=9000)
