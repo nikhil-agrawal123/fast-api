@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-
-class inp(BaseModel):
-    title:str
-    date:int
+class Trying(BaseModel):
+    title: str
+    date: int
