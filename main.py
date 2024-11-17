@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from typing import Optional
-from pydantic import BaseModel
 import uvicorn
+from pydantic import BaseModel
+from typing import Optional
 
 class something(BaseModel):
     title:str
@@ -14,7 +15,6 @@ class info(BaseModel):
     age:int
     about:str
     working_professional:bool
-
 app = FastAPI()
 
 @app.get('/')
