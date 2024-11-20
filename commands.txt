@@ -14,3 +14,28 @@ we can provide a default value to the parameters so that its not necessary to gi
 
 import pydantic to use the base model feature that allows us to create a post method for out api
 make a class with the inheritance of BaseModel to activated post metthods in it
+this helps to update info on the data base
+
+to connect database use sqlalchemy 
+make a folder with files __init__ crud database main models schemas
+
+schemas hold the input for the post methods and the type of input import pydantic for it
+
+models have the table creation for the database use sqlalchemy Column Integer and String for the commann input
+import the base from the database file
+
+database follow these command to connect a database to the api[[from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+SQL_ALCHEMY_DATABASE_URL_1 = 'sqlite:///./try.db'
+
+engine = create_engine(SQL_ALCHEMY_DATABASE_URL_1, connect_args={'check_same_thread': False})
+
+session_loacal = sessionmaker(autocommit=False, bind=engine, autoflush=False)
+
+Base = declarative_base()]]
+
+
+in the main make a data base connection funciton as get db to be used in get and post methods 
+also make a model engine with the command [models.Base.metadata.create_all(engine)] to run the updatation process in the database

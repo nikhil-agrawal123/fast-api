@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException,Depends,status,HTTPException
 from . import schemas, models
 from .database import engine, session_loacal
 from sqlalchemy.orm import Session
+from passlib.context import CryptContext
+
 
 app = FastAPI()
 
@@ -46,18 +48,41 @@ def delete(id,db:Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail='index not found')
     
 @app.put('/blog/{id}',status_code=status.HTTP_202_ACCEPTED)
-def update(id,db:Session = Depends(get_db),request = schemas.Trying):
+def update(id,request:schemas.Trying,db:Session = Depends(get_db)):
     data = db.query(models.Trying).filter(models.Trying.id == id)
     if not data.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='no data with the provided index')
-    data.update({'title' : f'{request.title()}'})
+    data.update(title = request.title())
     db.commit()
+
     return 'updated sucussefully'
 
-@app.get('/trying/{id}',status_code=200)
+@app.get('/trying/{id}',status_code=200, response_model=schemas.show)
 def get_id_info(id, db:Session = Depends(get_db)):
     try:
         data = db.query(models.Trying).filter(models.Trying.id == id).first()
         return data
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail='id does not exist') #better way to raise exceptions on the api
+
+pwd = CryptContext(schemes=['bcrypt'], deprecated = 'auto')
+
+@app.post('/user',status_code=status.HTTP_200_OK)
+def users(request : schemas.User,db:Session = Depends(get_db)):
+    hashed = pwd.hash(request.password)
+    user_info = models.User(
+        name = request.user_name,
+        password = hashed
+    )
+    db.add(user_info)
+    db.commit()
+    db.refresh(user_info)
+    return 'succesful'
+
+@app.get('/user/{id}',status_code=status.HTTP_200_OK,response_model=schemas.User_show)
+def get_user(id:int,db:Session = Depends(get_db)):
+    try:
+        data = db.query(models.User).filter(models.User.id == id).first()
+        return data
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail='id does not exist')
