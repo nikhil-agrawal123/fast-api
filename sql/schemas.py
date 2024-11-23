@@ -7,11 +7,13 @@ class Trying(BaseModel):
 class User(BaseModel):
     user_name : str
     password: str
-class show(Trying):
-    class Config():
-        from_attributes = True 
 
 class User_show(BaseModel):
     user_name:str = Field(alias='name')
     class Config():
         from_attributes = True
+
+class show(Trying):
+    user_show: User_show
+    class Config():
+        from_attributes = True 
