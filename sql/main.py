@@ -16,7 +16,7 @@ def get_db():
     finally:
         db.close()
 
-@app.post('/trying',status_code=status.HTTP_202_ACCEPTED)
+@app.post('/trying',status_code=status.HTTP_202_ACCEPTED,tags=['trying'])
 def create_trying(request: schemas.Trying, db: Session = Depends(get_db)):
     try:
         new_trying = models.Trying(
@@ -30,7 +30,7 @@ def create_trying(request: schemas.Trying, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
     
-@app.get('/trying',status_code=status.HTTP_200_OK)
+@app.get('/trying',status_code=status.HTTP_200_OK,tags=['trying'])
 def get_info(db: Session = Depends(get_db)):
     try:
         data = db.query(models.Trying).all()
@@ -38,7 +38,7 @@ def get_info(db: Session = Depends(get_db)):
     except Exception as e:
         return 'Could not load database'
 
-@app.delete('/blog/{id}',status_code=status.HTTP_200_OK)
+@app.delete('/blog/{id}',status_code=status.HTTP_200_OK,tags=['blog'])
 def delete(id,db:Session = Depends(get_db)):
     try:
         data = db.query(models.Trying).filter(models.Trying.id == id).delete(synchronize_session=False)
@@ -47,7 +47,7 @@ def delete(id,db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail='index not found')
     
-@app.put('/blog/{id}',status_code=status.HTTP_202_ACCEPTED)
+@app.put('/blog/{id}',status_code=status.HTTP_202_ACCEPTED,tags=['blog'])
 def update(id,request:schemas.Trying,db:Session = Depends(get_db)):
     data = db.query(models.Trying).filter(models.Trying.id == id)
     if not data.first():
@@ -57,7 +57,7 @@ def update(id,request:schemas.Trying,db:Session = Depends(get_db)):
 
     return 'updated sucussefully'
 
-@app.get('/trying/{id}',status_code=200, response_model=schemas.show)
+@app.get('/trying/{id}',status_code=200, response_model=schemas.show,tags=['trying'])
 def get_id_info(id, db:Session = Depends(get_db)):
     try:
         data = db.query(models.Trying).filter(models.Trying.id == id).first()
@@ -67,7 +67,7 @@ def get_id_info(id, db:Session = Depends(get_db)):
 
 pwd = CryptContext(schemes=['bcrypt'], deprecated = 'auto')
 
-@app.post('/user',status_code=status.HTTP_200_OK)
+@app.post('/user',status_code=status.HTTP_200_OK,tags=['user'])
 def users(request : schemas.User,db:Session = Depends(get_db)):
     hashed = pwd.hash(request.password)
     user_info = models.User(
@@ -79,7 +79,7 @@ def users(request : schemas.User,db:Session = Depends(get_db)):
     db.refresh(user_info)
     return 'succesful'
 
-@app.get('/user/{id}',status_code=status.HTTP_200_OK,response_model=schemas.User_show)
+@app.get('/user/{id}',status_code=status.HTTP_200_OK,response_model=schemas.User_show,tags=['user'])
 def get_user(id:int,db:Session = Depends(get_db)):
     try:
         data = db.query(models.User).filter(models.User.id == id).first()
