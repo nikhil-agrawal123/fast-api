@@ -21,7 +21,8 @@ def create_trying(request: schemas.Trying, db: Session = Depends(get_db)):
     try:
         new_trying = models.Trying(
             title=request.title,
-            date=request.date
+            date=request.date,
+            user_id = 1
         )
         db.add(new_trying)
         db.commit()
